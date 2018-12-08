@@ -1,16 +1,6 @@
 import xs, { Stream } from 'xstream';
-import sampleCombine from 'xstream/extra/sampleCombine';
-import {
-    VNode,
-    DOMSource,
-    div,
-    h2,
-    textarea,
-    button,
-    h1,
-    h4,
-    a
-} from '@cycle/dom';
+
+import { VNode, DOMSource, div, h2, h1, h4, a } from '@cycle/dom';
 import { Sources, Sinks, Reducer, User } from '../interfaces';
 import { HTTPSource } from '@cycle/http';
 
@@ -20,10 +10,7 @@ export interface State {
 export const defaultState: State = { users: [] };
 
 export interface DOMIntent {
-    speech$: Stream<null>;
-    link$: Stream<null>;
-    updateText$: Stream<string>;
-    startup$: Stream<null>;
+    startup$: Stream<any>;
 }
 
 export interface HTTPIntent {
@@ -56,52 +43,40 @@ function model(populateUsers$: Stream<User[]>): Stream<Reducer<State>> {
 }
 
 function view(state$: Stream<State>): Stream<VNode> {
-    return state$.map(({ users }) =>
-        div('.users', [
-            h2('Users'),
-            div(
-                '.user-list',
-                users.map((user, index) =>
-                    !user
-                        ? null
-                        : div('.user' + index, [
-                              h1('.user-name', user.name),
-                              h4('.user-email', user.email),
-                              a(
-                                  '.user-website',
-                                  { attrs: { href: user.website } },
-                                  user.website
-                              )
-                          ])
-                )
-            )
-        ])
-    );
+    return state$.map(({ users }) => (
+        <div id="users">
+            <h2>Users</h2>
+            <div id="user-list">
+                {users.map((user, index) =>
+                    !user ? null : (
+                        <div id={'user' + index}>
+                            <h1 id="user-name">{user.name}</h1>
+                            <h4 id="user-email">{user.email}</h4>
+                            <a
+                                id="user-website"
+                                href={'http://' + user.website}
+                            >
+                                {user.website}
+                            </a>
+                        </div>
+                    )
+                )}
+            </div>
+        </div>
+    ));
 }
 
 function intent(DOM: DOMSource): DOMIntent {
-    const updateText$ = DOM.select('#text')
-        .events('input')
-        .map((ev: any) => ev.target.value);
-
-    const speech$ = DOM.select('[data-action="speak"]')
-        .events('click')
-        .mapTo(null);
-
-    const link$ = DOM.select('[data-action="navigate"]')
-        .events('click')
-        .mapTo(null);
-
     const startup$ = xs.of(null);
 
-    return { updateText$, speech$, link$, startup$ };
+    return { startup$ };
 }
 
 function intentHTTP(HTTP: HTTPSource): HTTPIntent {
     const populateUsers$ = HTTP.select('users')
         .flatten()
         .map(res => res.body);
-    console.log(populateUsers$);
+
     return { populateUsers$ };
 }
 
