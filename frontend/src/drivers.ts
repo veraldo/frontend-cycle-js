@@ -1,5 +1,6 @@
 import { makeDOMDriver } from '@cycle/dom';
 import { makeHistoryDriver } from '@cycle/history';
+import { makeHTTPDriver } from '@cycle/http';
 import { withState } from '@cycle/state';
 import { routerify } from 'cyclic-router';
 import switchPath from 'switch-path';
@@ -9,6 +10,7 @@ import speechDriver from './drivers/speech';
 
 const driversFactories: any = {
     DOM: () => makeDOMDriver('#app'),
+    HTTP: () => makeHTTPDriver(),
     history: () => makeHistoryDriver(),
     speech: () => speechDriver
 };

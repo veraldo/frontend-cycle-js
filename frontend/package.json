@@ -54,6 +54,7 @@
   "dependencies": {
     "@cycle/dom": "^22.0.0",
     "@cycle/history": "^7.0.0",
+    "@cycle/http": "^15.0.0",
     "@cycle/isolate": "^4.1.0",
     "@cycle/run": "^5.1.0",
     "@cycle/state": "^1.0.0",
