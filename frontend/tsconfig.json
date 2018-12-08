@@ -1,0 +1,17 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "ES6",
+    "moduleResolution": "node",
+    "target": "ES6",
+    "sourceMap": true,
+    "jsx": "react",
+    "jsxFactory": "Snabbdom.createElement",
+    "noImplicitReturns": true,
+    "strict": true,
+    "strictFunctionTypes": false,
+    "allowJs": true,
+    "lib": ["es6", "es5", "dom"]
+  },
+  "exclude": ["node_modules", "build", "webpack.config.js"]
+}
